@@ -2,5 +2,5 @@ bin
 obj
 Data
 lib_finder.script
-Pertotman.layout
-Pertotman.depend
+*.layout
+*.depend
