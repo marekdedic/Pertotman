@@ -9,57 +9,57 @@ MenuItem::MenuItem(GLfloat xIn, GLfloat yIn, GLTexture srcTextures, menuItemType
     switch(type)
     {
         case NEW:
-         cap = "New Game";
+         cap = "Nova Hra";
          break;
         case CLOSE:
-         cap = "Back to Game";
+         cap = "Zpet do Hry";
          break;
         case SAVE:
-         cap = "Save";
+         cap = "Ulozit";
          break;
         case LOAD:
-         cap = "Load";
+         cap = "Nacist";
          break;
         case SET:
-         cap = "Settings";
+         cap = "Nastaveni";
          break;
         case BACK:
-         cap = "Back to Main Menu";
+         cap = "Zpet do Hl. Menu";
          break;
         case SHUT:
-         cap = "Quit";
+         cap = "Ukoncit";
          break;
         case FPS:
          switch (FRAMERATE)
          {
             case 30:
-             cap = "Max. Framerate: 30";
+             cap = "Max. FPS: 30";
              break;
             case 60:
-             cap = "Max. Framerate: 60";
+             cap = "Max. FPS: 60";
              break;
             case 120:
-             cap = "Max. Framerate: 120";
+             cap = "Max. FPS: 120";
              break;
             default:
-             cap = "Max. Framerate: Inf";
+             cap = "Max. FPS: Inf";
              break;
          }
          break;
         case CLOSESET:
-         cap = "Close Settings";
+         cap = "Zavrit Nastaveni";
          break;
         case DIF:
          switch (Enemy::velocity)
          {
             case 50:
-             cap = "Difficulty: Easy";
+             cap = "Obtiznost: Lehka";
              break;
             case 75:
-             cap = "Difficulty: Medium";
+             cap = "Obtiznost: Stredni";
              break;
             default:
-             cap = "Difficulty: Hard";
+             cap = "Obtiznost: Tezka";
              break;
          }
          break;
@@ -83,7 +83,7 @@ bool MenuItem::handleM(SDL_Event inputEvent)
              break;
             case SAVE:
              CURRENT->save();
-             caption.loadText("Successful!", "04B_30.ttf", 32, {0, 0, 0, 255});
+             caption.loadText("Ulozeno!", "04B_30.ttf", 32, {0, 0, 0, 255});
              break;
             case LOAD:
              CURRENT->destroy();
@@ -106,19 +106,19 @@ bool MenuItem::handleM(SDL_Event inputEvent)
              {
                 case 0:
                  FRAMERATE = 30;
-                 cap = "Max. Framerate: 30";
+                 cap = "Max. FPS: 30";
                  break;
                 case 30:
                  FRAMERATE = 60;
-                 cap = "Max. Framerate: 60";
+                 cap = "Max. FPS: 60";
                  break;
                 case 60:
                  FRAMERATE = 120;
-                 cap = "Max. Framerate: 120";
+                 cap = "Max. FPS: 120";
                  break;
                 default:
                  FRAMERATE = 0;
-                 cap = "Max. Framerate: Inf";
+                 cap = "Max. FPS: Inf";
                  break;
              }
              caption.loadText(cap, "04B_30.ttf", 32, {0, 0, 0, 255});
@@ -128,15 +128,15 @@ bool MenuItem::handleM(SDL_Event inputEvent)
              {
                 case 50:
                  Enemy::velocity = 75;
-                 cap = "Difficulty: Medium";
+                 cap = "Obtiznost: Stredni";
                  break;
                 case 75:
                  Enemy::velocity = 100;
-                 cap = "Difficulty: Hard";
+                 cap = "Obtiznost: Tezka";
                  break;
                 default:
                  Enemy::velocity = 50;
-                 cap = "Difficulty: Easy";
+                 cap = "Obtiznost: Lehka";
                  break;
              }
              caption.loadText(cap, "04B_30.ttf", 32, {0, 0, 0, 255});
