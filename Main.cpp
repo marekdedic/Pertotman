@@ -24,7 +24,7 @@ GLint RoundTo(GLfloat input, GLint step)
     else {return step * (counter + 1);}
 }
 
-int SDL_main(int, char**)
+int main(int, char**)
 {
 	SDL_Event event;
 	int time;
