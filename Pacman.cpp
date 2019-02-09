@@ -110,29 +110,6 @@ void Pacman::path()
 	}
 	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
 	start->compute(0);
-	while(target->dist > 0)
-    {
-        if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
-        {
-            target = target->up;
-            continue;
-        }
-        if((target->left != nullptr) and (target->left->dist == (target->dist - 1)))
-        {
-            target = target->left;
-            continue;
-        }
-        if((target->right != nullptr) and (target->right->dist == (target->dist - 1)))
-        {
-            target = target->right;
-            continue;
-        }
-        if((target->down != nullptr) and (target->down->dist == (target->dist - 1)))
-        {
-            target = target->down;
-            continue;
-        }
-    }
     for (auto it{CURRENT->enemies.begin()}; it < CURRENT->enemies.end(); ++it)
     {
         (*it)->setPath();
