@@ -206,7 +206,7 @@ void Level::update()
         {
             coffees[i]->update();
         }
-        for (unsigned int i = 0; i < enemies.size(); i++)
+        for (unsigned int i = 0; i < 1; i++)
         {
             enemies[i]->update();
         }
