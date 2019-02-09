@@ -12,7 +12,7 @@ void Level::init(string name, bool full)
 {
 	if (name.empty() or (name == "NULL"))
     {
-        current = "level1";
+        current = "level9";
         levelCounter = 0;
         menus.push_back(new Menu(MAIN));
     }
