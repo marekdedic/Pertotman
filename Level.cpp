@@ -167,6 +167,14 @@ void Level::handle(SDL_Event inputEvent)
 {
     if((inputEvent.type == SDL_KEYDOWN) and (inputEvent.key.keysym.sym == SDLK_ESCAPE))
     {
+        if (PAUSE == 0)
+        {
+            PAUSE = -1;
+        }
+        else
+        {
+            PAUSE = 0;
+        }
         if(menus.empty()) {menus.push_back(new Menu(ESCAPE));}
         else {menus.pop_back();}
     }

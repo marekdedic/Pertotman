@@ -16,6 +16,7 @@ class Pacman: public RendObj
      void handle(SDL_Event inputEvent);
      void update();
      void render();
+     void path();
     private:
      GLfloat xPVel, xNVel, yPVel, yNVel, angle;
      static const int velocity;

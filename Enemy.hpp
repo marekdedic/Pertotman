@@ -19,7 +19,6 @@ class Enemy: public RendObj
      void update();
     private:
      Space* TransBuff[3];
-     void path();
 };
 
 #endif //ENEMY_HPP

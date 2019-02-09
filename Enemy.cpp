@@ -18,9 +18,9 @@ void Enemy::update()
         if (TransBuff[i] == nullptr)
         {
             if (i < 2) {continue;}
-            path();
+            CURRENT->pacmans[0]->path();
             i = 0;
-            if (TransBuff[i] == nullptr) {cerr << "Pathfinder error. Skipped." << endl;}
+            if (TransBuff[i] == nullptr) {cerr << "Pathfinder error. Skipped." << endl; return;}
         }
         GLfloat vec[2] = {TransBuff[i]->x - x, TransBuff[i]->y - y};
         GLfloat mag = sqrt(pow(vec[0], 2) + pow(vec[1], 2));
@@ -52,47 +52,3 @@ void Enemy::update()
 		REPEAT_LEVEL = true;
 	}
 }
-void Enemy::path()
-{
-	Space* target = nullptr;
-	Space* start = nullptr;
-	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
-	{
-		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32))) {start = CURRENT->spaces[i];}
-        if((CURRENT->spaces[i]->x == RoundTo(CURRENT->pacmans[0]->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->pacmans[0]->y, 32))) {target = CURRENT->spaces[i];}
-	}
-	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
-	start->compute(0);
-	while(target->dist > 0)
-    {
-        if(target->dist < 3) {TransBuff[target->dist] = target;}
-        if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
-        {
-            target = target->up;
-            continue;
-        }
-        if((target->left != nullptr) and (target->left->dist == (target->dist - 1)))
-        {
-            target = target->left;
-            continue;
-        }
-        if((target->right != nullptr) and (target->right->dist == (target->dist - 1)))
-        {
-            target = target->right;
-            continue;
-        }
-        if((target->down != nullptr) and (target->down->dist == (target->dist - 1)))
-        {
-            target = target->down;
-            continue;
-        }
-    }
-    for (unsigned int i = 0; i < 3; i++)
-	{
-		if(TransBuff[i] == nullptr) {TransBuff[i] = target;}
-	}
-	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
-	{
-		CURRENT->spaces[i]->dist = -1;
-	}
- }
