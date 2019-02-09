@@ -16,6 +16,30 @@ void Space::neighbours(Level* thisLevel)
 		if((thisLevel->spaces[i]->y == y) and (thisLevel->spaces[i]->x == (x - 32))) {left = thisLevel->spaces[i];}
 	}
 }
+void Space::computeGraph(std::vector<Space*> endpoints, Arc* currentArc)
+{
+    if(arcs.size() > 0)
+    {
+        return;
+    }
+    unsigned int neighbours{0};
+    if(up != nullptr) {++neighbours;}
+    if(down != nullptr) {++neighbours;}
+    if(left != nullptr) {++neighbours;}
+    if(right != nullptr) {++neighbours;}
+    if(neighbours > 2 or (std::find(endpoints.begin(), endpoints.end(), this) != endpoints.end()))
+    {
+        arcs.push_back(currentArc);
+        currentArc->add(this);
+        currentArc = new Arc{this};
+    }
+    arcs.push_back(new Arc{this});
+    currentArc->add(this);
+    if(up != nullptr) {up->computeGraph(endpoints, currentArc);}
+    if(down != nullptr) {down->computeGraph(endpoints, currentArc);}
+    if(left != nullptr) {left->computeGraph(endpoints, currentArc);}
+    if(right != nullptr) {right->computeGraph(endpoints, currentArc);}
+}
 void Space::compute(GLint ThisDist, char from)
 {
 	if((dist == -1) or (ThisDist < dist))

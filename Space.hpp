@@ -20,7 +20,10 @@ class Space: public RendObj
      int dist;
      Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures);
      void neighbours(Level* thisLevel);
+     void computeGraph(std::vector<Space*> endpoints, Arc* currentArc);
      void compute(GLint ThisDist, char from = 'a');
+    private:
+     std::vector<Arc*> arcs;
 };
 
 #endif //SPACE_HPP

@@ -109,6 +109,7 @@ void Pacman::path()
         if((CURRENT->spaces[i]->x == RoundTo(CURRENT->pacmans[0]->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->pacmans[0]->y, 32))) {target = CURRENT->spaces[i];}
 	}
 	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
+	start->computeGraph(vector<Space*>{start, target}, new Arc{start});
 	start->compute(0);
     for (auto it{CURRENT->enemies.begin()}; it < CURRENT->enemies.end(); ++it)
     {
