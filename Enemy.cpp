@@ -52,3 +52,43 @@ void Enemy::update()
 		REPEAT_LEVEL = true;
 	}
 }
+void Enemy::setPath()
+{
+    Space* target = nullptr;
+	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
+	{
+		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32)))
+		{
+            target = CURRENT->spaces[i];
+            break;
+        }
+	}
+	TransBuff[0] = nullptr;
+	TransBuff[1] = nullptr;
+	TransBuff[2] = nullptr;
+	for (unsigned int i{0}; i < 3; ++i)
+	{
+        TransBuff[i] = target;
+        if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
+        {
+            target = target->up;
+            continue;
+        }
+        if((target->left != nullptr) and (target->left->dist == (target->dist - 1)))
+        {
+            target = target->left;
+            continue;
+        }
+        if((target->right != nullptr) and (target->right->dist == (target->dist - 1)))
+        {
+            target = target->right;
+            continue;
+        }
+        if((target->down != nullptr) and (target->down->dist == (target->dist - 1)))
+        {
+            target = target->down;
+            continue;
+        }
+        break;
+	}
+}

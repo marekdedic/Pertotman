@@ -99,8 +99,7 @@ void Pacman::render()
     glBindTexture(GL_TEXTURE_2D, 0);
     glLoadIdentity();
 }
-void Pacman::path() {}
-/*void Pacman::oldPath()
+void Pacman::path()
 {
 	Space* target = nullptr;
 	Space* start = nullptr;
@@ -113,7 +112,6 @@ void Pacman::path() {}
 	start->compute(0);
 	while(target->dist > 0)
     {
-        if(target->dist < 3) {TransBuff[target->dist] = target;}
         if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
         {
             target = target->up;
@@ -135,13 +133,12 @@ void Pacman::path() {}
             continue;
         }
     }
-    for (unsigned int i = 0; i < 3; i++)
-	{
-		if(TransBuff[i] == nullptr) {TransBuff[i] = target;}
-	}
+    for (auto it{CURRENT->enemies.begin()}; it < CURRENT->enemies.end(); ++it)
+    {
+        (*it)->setPath();
+    }
 	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
 	{
 		CURRENT->spaces[i]->dist = -1;
 	}
  }
-*/
