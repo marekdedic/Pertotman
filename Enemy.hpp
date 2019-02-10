@@ -17,7 +17,7 @@ class Enemy: public RendObj
      static int velocity;
      Enemy(GLfloat xIn, GLfloat yIn, GLTexture srcTextures);
      void update();
-     void setPath();
+     void setPath(Space* pacmanPos);
     private:
      Space* TransBuff[3];
 };

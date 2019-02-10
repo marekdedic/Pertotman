@@ -52,7 +52,7 @@ void Enemy::update()
 		REPEAT_LEVEL = true;
 	}
 }
-void Enemy::setPath()
+void Enemy::setPath(Space* pacmanPos)
 {
     Space* target = nullptr;
 	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
@@ -68,14 +68,37 @@ void Enemy::setPath()
 	TransBuff[2] = nullptr;
 
     TransBuff[0] = target;
+    cerr << "SPACE: " << target->x / 32 << " " << target->y / 32 << endl;
 	unsigned int i{1};
-	cerr << "PRED: " << target->pred->spaces.size() << endl;
-    for(auto it{target->pred->spaces.begin()}; it < target->pred->spaces.end(); ++it)
-    {
-        TransBuff[i] = *it;
-        if(i > 2)
+	while(target != pacmanPos)
+	{
+        Arc* arc = target->pred;
+        if(target == arc->spaces.front())
         {
-            break;
+            for(auto it{next(arc->spaces.begin())}; it != arc->spaces.end(); ++it)
+            {
+                if(i < 2)
+                {
+                    TransBuff[i] = *it;
+                    ++i;
+                }
+                cerr << "SPACE: " << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+            }
+            target = arc->spaces.back();
         }
+        else
+        {
+            for(auto it{next(arc->spaces.rbegin())}; it != arc->spaces.rend(); ++it)
+            {
+                if(i < 2)
+                {
+                    TransBuff[i] = *it;
+                    ++i;
+                }
+                cerr << "SPACE: " << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+            }
+            target = arc->spaces.front();
+        }
+
     }
 }

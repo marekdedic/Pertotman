@@ -115,7 +115,7 @@ void Pacman::path()
     {
         (*it)->setPath();
     }*/
-    CURRENT->enemies.front()->setPath();
+    CURRENT->enemies.front()->setPath(start);
 	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
 	{
 		CURRENT->spaces[i]->dist = -1;
