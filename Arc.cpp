@@ -31,7 +31,7 @@ void Arc::recomputeDistance(int startDist, Space* from)
         next = spaces.front();
     }
     //cerr << "LENGTH: " << spaces.size() - 1 << " STARTDIST: " << startDist << " NEXTDIST: " << next->dist << " X: " << next->x / 32 << " Y: " << next->y / 32 << endl;
-    if(next->dist == -1 or (next->dist > (startDist + spaces.size() - 1)))
+    if(next->dist == -1 or (next->dist > (startDist + static_cast<int>(spaces.size()) - 1)))
     {
         next->dist = startDist + spaces.size() - 1;
         next->pred = this;

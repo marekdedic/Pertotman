@@ -106,7 +106,7 @@ void Pacman::path()
 	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
 	{
 		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32))) {start = CURRENT->spaces[i];}
-        if((CURRENT->spaces[i]->x == RoundTo(CURRENT->enemies[0]->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->enemies[0]->y, 32))) {target = CURRENT->spaces[i];}
+        if((CURRENT->spaces[i]->x == RoundTo(CURRENT->enemies.front()->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->enemies.front()->y, 32))) {target = CURRENT->spaces[i];}
 	}
 	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
 	CURRENT->computeGraph(vector<Space*>{start, target});

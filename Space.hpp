@@ -19,16 +19,13 @@ class Space: public RendObj
      Space* right;
      int dist;
      Arc* pred;
-     bool isNode;
+     bool isDissolved;
      Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures);
      void neighbours(Level* thisLevel);
      void continueArc(Arc* arc);
      int nodeEvaluation(Space* target);
      void added_to_permanent();
-     //void compute(GLint ThisDist, char from = 'a');
      std::vector<Arc*> arcs;
-    private:
-     Space* predecessor;
 };
 
 #endif //SPACE_HPP

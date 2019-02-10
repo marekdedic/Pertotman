@@ -68,7 +68,7 @@ void Enemy::setPath(Space* pacmanPos)
 	TransBuff[2] = nullptr;
 
     TransBuff[0] = target;
-    cerr << "SPACE: " << target->x / 32 << " " << target->y / 32 << endl;
+    cout << endl << "PATH:" << endl << target->x / 32 << " " << target->y / 32 << endl;
 	unsigned int i{1};
 	while(target != pacmanPos)
 	{
@@ -82,7 +82,7 @@ void Enemy::setPath(Space* pacmanPos)
                     TransBuff[i] = *it;
                     ++i;
                 }
-                cerr << "SPACE: " << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+                cout << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
             }
             target = arc->spaces.back();
         }
@@ -95,7 +95,7 @@ void Enemy::setPath(Space* pacmanPos)
                     TransBuff[i] = *it;
                     ++i;
                 }
-                cerr << "SPACE: " << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+                cout << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
             }
             target = arc->spaces.front();
         }

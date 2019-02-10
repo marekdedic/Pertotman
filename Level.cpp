@@ -251,9 +251,11 @@ void Level::render() const
 }
 void Level::computeGraph(std::vector<Space*> endpoints)
 {
+    nodes.clear();
     for(auto space: spaces) // Reset all nodes, everything
     {
-        space->isNode = true;
+        space->isDissolved = false;
+        space->arcs.clear();
         unsigned int neighbours{0};
         if(space->up != nullptr) {++neighbours;}
         if(space->down != nullptr) {++neighbours;}
@@ -261,7 +263,7 @@ void Level::computeGraph(std::vector<Space*> endpoints)
         if(space->right != nullptr) {++neighbours;}
         if(neighbours > 2 or (std::find(endpoints.begin(), endpoints.end(), space) != endpoints.end()))
         {
-            nodes.push_back(space);
+            nodes.push_back(space); // Find nodes
         }
     }
     for(auto space: spaces) // "Dissolve" all spaces which aren't nodes
@@ -270,7 +272,7 @@ void Level::computeGraph(std::vector<Space*> endpoints)
         {
             continue;
         }
-        if(!space->isNode)
+        if(space->isDissolved)
         {
             continue;
         }
@@ -282,7 +284,7 @@ void Level::computeGraph(std::vector<Space*> endpoints)
         //cerr << "START: " << space->x / 32 << " "  << space->y  / 32 << endl;
         Arc* currentArc{new Arc{space}};
         space->arcs.push_back(currentArc);
-        space->isNode = false;
+        space->isDissolved = true;
         if(neighbours.size() > 0)
         {
             neighbours[0]->continueArc(currentArc);
@@ -306,7 +308,7 @@ void Level::computeGraph(std::vector<Space*> endpoints)
             {
                 continue;
             }
-            if(neighbour->isNode)
+            if(!neighbour->isDissolved)
             {
                 Arc* currentArc{new Arc{space}};
                 currentArc->add(neighbour);
@@ -323,6 +325,7 @@ void Level::pathfind(Space* start, Space* target)
     for(auto it: spaces)
     {
         it->dist = -1; // INF
+        it->pred = nullptr;
     }
     start->dist = 0;
     start->added_to_permanent();
@@ -347,11 +350,11 @@ void Level::pathfind(Space* start, Space* target)
             }
         }
         permanent.push_back(lowest);
-        lowest->added_to_permanent();
-        if(lowest == target || permanent.size() > 100)
+        if(lowest == target)
         {
             break;
         }
+        lowest->added_to_permanent();
     }
 }
 void Level::destroy()

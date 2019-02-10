@@ -1,7 +1,7 @@
 #include "Main.hpp"
 using namespace std;
 
-Space::Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures) : RendObj(xIn, yIn, srcTextures), up(nullptr), down(nullptr), left(nullptr), right(nullptr), dist(-1), isNode{false}, arcs{vector<Arc*>{}}
+Space::Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures) : RendObj(xIn, yIn, srcTextures), up(nullptr), down(nullptr), left(nullptr), right(nullptr), dist(-1), isDissolved{true}, arcs{vector<Arc*>{}}
 {
     textures.x = 0;
     textures.y = 0;
@@ -25,15 +25,15 @@ void Space::continueArc(Arc* arc)
     if(right != nullptr) {neighbours.push_back(right);}
     arc->add(this);
     arcs.push_back(arc);
-    if(neighbours.size() <= 2)
+    if(std::find(CURRENT->nodes.begin(), CURRENT->nodes.end(), this) == CURRENT->nodes.end())
     {
-        isNode = false;
+        isDissolved = true;
         //cerr << "CONTI: " << x / 32 << " "  << y  / 32 << " / " << neighbours.size() << endl;
-        if(neighbours.size() > 0 and neighbours[0]->isNode)
+        if(neighbours.size() > 0 and !neighbours[0]->isDissolved)
         {
             neighbours[0]->continueArc(arc);
         }
-        if(neighbours.size() > 1 and neighbours[1]->isNode)
+        if(neighbours.size() > 1 and !neighbours[1]->isDissolved)
         {
             neighbours[1]->continueArc(arc);
         }
