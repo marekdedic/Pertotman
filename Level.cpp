@@ -249,6 +249,111 @@ void Level::render() const
     }
 	if(menus.size() > 0) {menus[menus.size() - 1]->render();}
 }
+void Level::computeGraph(std::vector<Space*> endpoints)
+{
+    for(auto space: spaces) // Reset all nodes, everything
+    {
+        space->isNode = true;
+        unsigned int neighbours{0};
+        if(space->up != nullptr) {++neighbours;}
+        if(space->down != nullptr) {++neighbours;}
+        if(space->left != nullptr) {++neighbours;}
+        if(space->right != nullptr) {++neighbours;}
+        if(neighbours > 2 or (std::find(endpoints.begin(), endpoints.end(), space) != endpoints.end()))
+        {
+            nodes.push_back(space);
+        }
+    }
+    for(auto space: spaces) // "Dissolve" all spaces which aren't nodes
+    {
+        if(std::find(nodes.begin(), nodes.end(), space) != nodes.end())
+        {
+            continue;
+        }
+        if(!space->isNode)
+        {
+            continue;
+        }
+        vector<Space*> neighbours{vector<Space*>{}};
+        if(space->up != nullptr) {neighbours.push_back(space->up);}
+        if(space->down != nullptr) {neighbours.push_back(space->down);}
+        if(space->left != nullptr) {neighbours.push_back(space->left);}
+        if(space->right != nullptr) {neighbours.push_back(space->right);}
+        //cerr << "START: " << space->x / 32 << " "  << space->y  / 32 << endl;
+        Arc* currentArc{new Arc{space}};
+        space->arcs.push_back(currentArc);
+        space->isNode = false;
+        if(neighbours.size() > 0)
+        {
+            neighbours[0]->continueArc(currentArc);
+        }
+        if(neighbours.size() > 1)
+        {
+            neighbours[1]->continueArc(currentArc);
+        }
+    }
+    vector<Space*> done{vector<Space*>{}};
+    for(auto space: nodes) // Connect neighbouring nodes as well
+    {
+        vector<Space*> neighbours{vector<Space*>{}};
+        if(space->up != nullptr) {neighbours.push_back(space->up);}
+        if(space->down != nullptr) {neighbours.push_back(space->down);}
+        if(space->left != nullptr) {neighbours.push_back(space->left);}
+        if(space->right != nullptr) {neighbours.push_back(space->right);}
+        for(auto neighbour: neighbours)
+        {
+            if(std::find(done.begin(), done.end(), neighbour) != done.end())
+            {
+                continue;
+            }
+            if(neighbour->isNode)
+            {
+                Arc* currentArc{new Arc{space}};
+                currentArc->add(neighbour);
+                space->arcs.push_back(currentArc);
+                neighbour->arcs.push_back(currentArc);
+            }
+        }
+        done.push_back(space);
+    }
+}
+void Level::pathfind(Space* start, Space* target)
+{
+    vector<Space*> permanent{start};
+    for(auto it: spaces)
+    {
+        it->dist = -1; // INF
+    }
+    start->dist = 0;
+    start->added_to_permanent();
+    while(true)
+    {
+        // Find the non-permanent node with the lowest node evaluation function
+        Space* lowest{nullptr};
+        for(auto it: nodes)
+        {
+            if(find(permanent.begin(), permanent.end(), it) != permanent.end())
+            {
+                continue; // SKIP permanently labelled
+            }
+            //cerr << "EVAL: " << it->dist << endl;
+            if(it->dist < 0)
+            {
+                continue; // Infinite distance
+            }
+            if(lowest == nullptr or (it->nodeEvaluation(target) < lowest->nodeEvaluation(target)))
+            {
+                lowest = it;
+            }
+        }
+        permanent.push_back(lowest);
+        lowest->added_to_permanent();
+        if(lowest == target || permanent.size() > 100)
+        {
+            break;
+        }
+    }
+}
 void Level::destroy()
 {
     for (unsigned int i = 0; i < menus.size(); i++)

@@ -22,6 +22,7 @@ class Level
      static std::string current;
      static std::string next;
      std::vector<Menu*> menus;
+     std::vector<Space*> nodes;
      std::vector<Space*> spaces;
      std::vector<Wall*> walls;
      std::vector<Coffee*> coffees;
@@ -34,6 +35,8 @@ class Level
      void handle(SDL_Event inputEvent);
      void update();
      void render() const;
+     void computeGraph(std::vector<Space*> endpoints);
+     void pathfind(Space* start, Space* target);
      void destroy();
     private:
      GLTexture textures;

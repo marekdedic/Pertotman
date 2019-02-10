@@ -14,7 +14,7 @@ class Arc
     public:
         Arc(Space* space);
         void add(Space* space);
-    private:
+        void recomputeDistance(int startDist, Space* from);
         std::vector<Space*> spaces;
 };
 

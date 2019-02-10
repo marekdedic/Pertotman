@@ -1,7 +1,7 @@
 #include "Main.hpp"
 using namespace std;
 
-Space::Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures) : RendObj(xIn, yIn, srcTextures), up(nullptr), down(nullptr), left(nullptr), right(nullptr), dist(-1)
+Space::Space(GLfloat xIn, GLfloat yIn, GLTexture srcTextures) : RendObj(xIn, yIn, srcTextures), up(nullptr), down(nullptr), left(nullptr), right(nullptr), dist(-1), isNode{false}, arcs{vector<Arc*>{}}
 {
     textures.x = 0;
     textures.y = 0;
@@ -16,38 +16,42 @@ void Space::neighbours(Level* thisLevel)
 		if((thisLevel->spaces[i]->y == y) and (thisLevel->spaces[i]->x == (x - 32))) {left = thisLevel->spaces[i];}
 	}
 }
-void Space::computeGraph(std::vector<Space*> endpoints, Arc* currentArc)
+void Space::continueArc(Arc* arc)
 {
-    if(arcs.size() > 0)
+    vector<Space*> neighbours{vector<Space*>{}};
+    if(up != nullptr) {neighbours.push_back(up);}
+    if(down != nullptr) {neighbours.push_back(down);}
+    if(left != nullptr) {neighbours.push_back(left);}
+    if(right != nullptr) {neighbours.push_back(right);}
+    arc->add(this);
+    arcs.push_back(arc);
+    if(neighbours.size() <= 2)
     {
-        return;
+        isNode = false;
+        //cerr << "CONTI: " << x / 32 << " "  << y  / 32 << " / " << neighbours.size() << endl;
+        if(neighbours.size() > 0 and neighbours[0]->isNode)
+        {
+            neighbours[0]->continueArc(arc);
+        }
+        if(neighbours.size() > 1 and neighbours[1]->isNode)
+        {
+            neighbours[1]->continueArc(arc);
+        }
     }
-    unsigned int neighbours{0};
-    if(up != nullptr) {++neighbours;}
-    if(down != nullptr) {++neighbours;}
-    if(left != nullptr) {++neighbours;}
-    if(right != nullptr) {++neighbours;}
-    if(neighbours > 2 or (std::find(endpoints.begin(), endpoints.end(), this) != endpoints.end()))
+    else
     {
-        arcs.push_back(currentArc);
-        currentArc->add(this);
-        currentArc = new Arc{this};
+        //cerr << "ENDIN: " << x / 32 << " "  << y  / 32 << endl;
     }
-    arcs.push_back(new Arc{this});
-    currentArc->add(this);
-    if(up != nullptr) {up->computeGraph(endpoints, currentArc);}
-    if(down != nullptr) {down->computeGraph(endpoints, currentArc);}
-    if(left != nullptr) {left->computeGraph(endpoints, currentArc);}
-    if(right != nullptr) {right->computeGraph(endpoints, currentArc);}
 }
-void Space::compute(GLint ThisDist, char from)
+int Space::nodeEvaluation(Space* target)
 {
-	if((dist == -1) or (ThisDist < dist))
+    return dist + abs(x - target->x) + abs(y - target->y);
+}
+void Space::added_to_permanent()
+{
+    //cerr << "ADD: " << arcs.size() << endl;
+    for(auto it: arcs)
     {
-        dist = ThisDist;
-        if((up != nullptr) and (from != 'u')) {up->compute(ThisDist + 1, 'd');}
-        if((down != nullptr) and (from != 'd')) {down->compute(ThisDist + 1, 'u');}
-        if((left != nullptr) and (from != 'l')) {left->compute(ThisDist + 1, 'r');}
-        if((right != nullptr) and (from != 'r')) {right->compute(ThisDist + 1, 'l');}
+        it->recomputeDistance(dist, this);
     }
 }

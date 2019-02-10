@@ -66,29 +66,16 @@ void Enemy::setPath()
 	TransBuff[0] = nullptr;
 	TransBuff[1] = nullptr;
 	TransBuff[2] = nullptr;
-	for (unsigned int i{0}; i < 3; ++i)
-	{
-        TransBuff[i] = target;
-        if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
+
+    TransBuff[0] = target;
+	unsigned int i{1};
+	cerr << "PRED: " << target->pred->spaces.size() << endl;
+    for(auto it{target->pred->spaces.begin()}; it < target->pred->spaces.end(); ++it)
+    {
+        TransBuff[i] = *it;
+        if(i > 2)
         {
-            target = target->up;
-            continue;
+            break;
         }
-        if((target->left != nullptr) and (target->left->dist == (target->dist - 1)))
-        {
-            target = target->left;
-            continue;
-        }
-        if((target->right != nullptr) and (target->right->dist == (target->dist - 1)))
-        {
-            target = target->right;
-            continue;
-        }
-        if((target->down != nullptr) and (target->down->dist == (target->dist - 1)))
-        {
-            target = target->down;
-            continue;
-        }
-        break;
-	}
+    }
 }
