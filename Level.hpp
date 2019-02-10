@@ -28,6 +28,7 @@ class Level
      std::vector<Coffee*> coffees;
      std::vector<Enemy*> enemies;
      std::vector<Pacman*> pacmans;
+     std::vector<Space*> permanent;
      Level(std::string name);
      void init(std::string name, bool full);
      void save() const;
@@ -35,8 +36,8 @@ class Level
      void handle(SDL_Event inputEvent);
      void update();
      void render() const;
-     void computeGraph(std::vector<Space*> endpoints);
-     void pathfind(Space* start, Space* target);
+     void computeGraph(std::vector<Space*> endpoints, Space* start);
+     void pathfind(Space* target);
      void destroy();
     private:
      GLTexture textures;

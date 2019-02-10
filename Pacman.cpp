@@ -101,23 +101,35 @@ void Pacman::render()
 }
 void Pacman::path()
 {
-	Space* target = nullptr;
-	Space* start = nullptr;
-	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
+	Space* start{nullptr};
+	for(auto space: CURRENT->spaces)
 	{
-		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32))) {start = CURRENT->spaces[i];}
-        if((CURRENT->spaces[i]->x == RoundTo(CURRENT->enemies.front()->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->enemies.front()->y, 32))) {target = CURRENT->spaces[i];}
-	}
-	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
-	CURRENT->computeGraph(vector<Space*>{start, target});
-	CURRENT->pathfind(start, target);
-    /*for (auto it{CURRENT->enemies.begin()}; it < CURRENT->enemies.end(); ++it)
+		if((space->y == RoundTo(y, 32)) and (space->x == RoundTo(x, 32))) {start = space;}
+    }
+    if(start == nullptr)
     {
-        (*it)->setPath();
-    }*/
-    CURRENT->enemies.front()->setPath(start);
-	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
+        cerr << "Pathfinder error." << endl;
+        return;
+    }
+    vector<Space*> targets{vector<Space*>{}};
+    for(auto enemy: CURRENT->enemies)
+    {
+        for(auto space: CURRENT->spaces)
+        {
+            if((space->x == RoundTo(enemy->x, 32)) and (space->y == RoundTo(enemy->y, 32))) {targets.push_back(space);}
+        }
+    }
+	if(targets.size() < CURRENT->enemies.size())
 	{
-		CURRENT->spaces[i]->dist = -1;
-	}
+        cerr << "Pathfinder error." << endl;
+        return;
+    }
+    vector<Space*> endpoints{targets};
+    endpoints.push_back(start);
+	CURRENT->computeGraph(endpoints, start);
+    for(unsigned int i{0}; i < targets.size(); ++i)
+    {
+        CURRENT->pathfind(targets[i]);
+        CURRENT->enemies[i]->setPath(start);
+    }
  }

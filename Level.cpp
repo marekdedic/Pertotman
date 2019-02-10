@@ -206,7 +206,7 @@ void Level::update()
         {
             coffees[i]->update();
         }
-        for (unsigned int i = 0; i < 1; i++)
+        for (unsigned int i = 0; i < enemies.size(); i++)
         {
             enemies[i]->update();
         }
@@ -249,7 +249,7 @@ void Level::render() const
     }
 	if(menus.size() > 0) {menus[menus.size() - 1]->render();}
 }
-void Level::computeGraph(std::vector<Space*> endpoints)
+void Level::computeGraph(std::vector<Space*> endpoints, Space* start)
 {
     nodes.clear();
     for(auto space: spaces) // Reset all nodes, everything
@@ -318,17 +318,23 @@ void Level::computeGraph(std::vector<Space*> endpoints)
         }
         done.push_back(space);
     }
-}
-void Level::pathfind(Space* start, Space* target)
-{
-    vector<Space*> permanent{start};
+    // Pathfinder state clearing
     for(auto it: spaces)
     {
         it->dist = -1; // INF
         it->pred = nullptr;
     }
+    permanent.clear();
+    permanent.push_back(start);
     start->dist = 0;
     start->added_to_permanent();
+}
+void Level::pathfind(Space* target)
+{
+    if(find(permanent.begin(), permanent.end(), target) != permanent.end())
+    {
+        return;
+    }
     while(true)
     {
         // Find the non-permanent node with the lowest node evaluation function
