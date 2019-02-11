@@ -345,7 +345,7 @@ void Level::pathfind(Space* target)
             {
                 continue; // SKIP permanently labelled
             }
-            //cerr << "EVAL: " << it->dist << endl;
+            //cerr << "EVAL: " << it->x/32 << " " << it->y/32 << " " << it->dist << endl;
             if(it->dist < 0)
             {
                 continue; // Infinite distance
@@ -356,11 +356,11 @@ void Level::pathfind(Space* target)
             }
         }
         permanent.push_back(lowest);
+        lowest->added_to_permanent();
         if(lowest == target)
         {
             break;
         }
-        lowest->added_to_permanent();
     }
 }
 void Level::destroy()
