@@ -4,7 +4,7 @@ using namespace std;
 unsigned int Coffee::count = 0;
 Coffee::Coffee(GLfloat xIn, GLfloat yIn, GLTexture srcTextures) : RendObj(xIn, yIn, srcTextures), armed(true)
 {
-	textures.x = 0;
+	textures.x = 64;
 	textures.y = 0;
     count++;
 }
