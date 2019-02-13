@@ -281,7 +281,6 @@ void Level::computeGraph(std::vector<Space*> endpoints, Space* start)
         if(space->down != nullptr) {neighbours.push_back(space->down);}
         if(space->left != nullptr) {neighbours.push_back(space->left);}
         if(space->right != nullptr) {neighbours.push_back(space->right);}
-        //cerr << "START: " << space->x / 32 << " "  << space->y  / 32 << endl;
         Arc* currentArc{new Arc{space}};
         space->arcs.push_back(currentArc);
         space->isDissolved = true;
@@ -345,7 +344,6 @@ void Level::pathfind(Space* target)
             {
                 continue; // SKIP permanently labelled
             }
-            //cerr << "EVAL: " << it->x/32 << " " << it->y/32 << " " << it->dist << endl;
             if(it->dist < 0)
             {
                 continue; // Infinite distance

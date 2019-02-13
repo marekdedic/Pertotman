@@ -28,7 +28,6 @@ void Space::continueArc(Arc* arc)
     if(std::find(CURRENT->nodes.begin(), CURRENT->nodes.end(), this) == CURRENT->nodes.end())
     {
         isDissolved = true;
-        //cerr << "CONTI: " << x / 32 << " "  << y  / 32 << " / " << neighbours.size() << endl;
         if(neighbours.size() > 0 and !neighbours[0]->isDissolved)
         {
             neighbours[0]->continueArc(arc);
@@ -38,10 +37,6 @@ void Space::continueArc(Arc* arc)
             neighbours[1]->continueArc(arc);
         }
     }
-    else
-    {
-        //cerr << "ENDIN: " << x / 32 << " "  << y  / 32 << endl;
-    }
 }
 int Space::nodeEvaluation(Space* target)
 {
@@ -49,7 +44,6 @@ int Space::nodeEvaluation(Space* target)
 }
 void Space::added_to_permanent()
 {
-    //cerr << "ADD: " << arcs.size() << endl;
     for(auto it: arcs)
     {
         it->recomputeDistance(dist, this);
