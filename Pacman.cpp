@@ -99,3 +99,37 @@ void Pacman::render()
     glBindTexture(GL_TEXTURE_2D, 0);
     glLoadIdentity();
 }
+void Pacman::path()
+{
+	Space* start{nullptr};
+	for(auto space: CURRENT->spaces)
+	{
+		if((space->y == RoundTo(y, 32)) and (space->x == RoundTo(x, 32))) {start = space;}
+    }
+    if(start == nullptr)
+    {
+        cerr << "Pathfinder error." << endl;
+        return;
+    }
+    vector<Space*> targets{vector<Space*>{}};
+    for(auto enemy: CURRENT->enemies)
+    {
+        for(auto space: CURRENT->spaces)
+        {
+            if((space->x == RoundTo(enemy->x, 32)) and (space->y == RoundTo(enemy->y, 32))) {targets.push_back(space);}
+        }
+    }
+	if(targets.size() < CURRENT->enemies.size())
+	{
+        cerr << "Pathfinder error." << endl;
+        return;
+    }
+    vector<Space*> endpoints{targets};
+    endpoints.push_back(start);
+	CURRENT->computeGraph(endpoints, start);
+    for(unsigned int i{0}; i < targets.size(); ++i)
+    {
+        CURRENT->pathfind(targets[i]);
+        CURRENT->enemies[i]->setPath(start);
+    }
+ }

@@ -10,6 +10,7 @@
 #include "Libs.hpp"
 #include "GLTexture.hpp"
 #include "RendObj.hpp"
+#include "Arc.hpp"
 #include "Coffee.hpp"
 #include "Enemy.hpp"
 #include "Level.hpp"

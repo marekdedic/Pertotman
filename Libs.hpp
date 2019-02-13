@@ -7,6 +7,7 @@
 #ifndef LIBS_HPP
 #define LIBS_HPP
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <sstream>

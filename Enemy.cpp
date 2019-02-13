@@ -18,9 +18,9 @@ void Enemy::update()
         if (TransBuff[i] == nullptr)
         {
             if (i < 2) {continue;}
-            path();
+            CURRENT->pacmans[0]->path();
             i = 0;
-            if (TransBuff[i] == nullptr) {cerr << "Pathfinder error. Skipped." << endl;}
+            if (TransBuff[i] == nullptr) {cerr << "Pathfinder error. Skipped." << endl; return;}
         }
         GLfloat vec[2] = {TransBuff[i]->x - x, TransBuff[i]->y - y};
         GLfloat mag = sqrt(pow(vec[0], 2) + pow(vec[1], 2));
@@ -52,47 +52,53 @@ void Enemy::update()
 		REPEAT_LEVEL = true;
 	}
 }
-void Enemy::path()
+void Enemy::setPath(Space* pacmanPos)
 {
-	Space* target = nullptr;
-	Space* start = nullptr;
+    Space* target = nullptr;
 	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
 	{
-		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32))) {start = CURRENT->spaces[i];}
-        if((CURRENT->spaces[i]->x == RoundTo(CURRENT->pacmans[0]->x, 32)) and (CURRENT->spaces[i]->y == RoundTo(CURRENT->pacmans[0]->y, 32))) {target = CURRENT->spaces[i];}
+		if((CURRENT->spaces[i]->y == RoundTo(y, 32)) and (CURRENT->spaces[i]->x == RoundTo(x, 32)))
+		{
+            target = CURRENT->spaces[i];
+            break;
+        }
 	}
-	if((start == nullptr) or (target == nullptr)) {cerr << "Pathfinder error. Deactivated Enemy." << endl; return;}
-	start->compute(0);
-	while(target->dist > 0)
-    {
-        if(target->dist < 3) {TransBuff[target->dist] = target;}
-        if((target->up != nullptr) and (target->up->dist == (target->dist - 1)))
+	TransBuff[0] = nullptr;
+	TransBuff[1] = nullptr;
+	TransBuff[2] = nullptr;
+
+    TransBuff[0] = target;
+    //cout << endl << "PATH:" << endl << target->x / 32 << " " << target->y / 32 << endl;
+	unsigned int i{1};
+	while(target != pacmanPos)
+	{
+        Arc* arc = target->pred;
+        if(target == arc->spaces.front())
         {
-            target = target->up;
-            continue;
+            for(auto it{next(arc->spaces.begin())}; it != arc->spaces.end(); ++it)
+            {
+                if(i < 2)
+                {
+                    TransBuff[i] = *it;
+                    ++i;
+                }
+                //cout << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+            }
+            target = arc->spaces.back();
         }
-        if((target->left != nullptr) and (target->left->dist == (target->dist - 1)))
+        else
         {
-            target = target->left;
-            continue;
+            for(auto it{next(arc->spaces.rbegin())}; it != arc->spaces.rend(); ++it)
+            {
+                if(i < 2)
+                {
+                    TransBuff[i] = *it;
+                    ++i;
+                }
+                //cout << (*it)->x / 32 << " " << (*it)->y / 32 << endl;
+            }
+            target = arc->spaces.front();
         }
-        if((target->right != nullptr) and (target->right->dist == (target->dist - 1)))
-        {
-            target = target->right;
-            continue;
-        }
-        if((target->down != nullptr) and (target->down->dist == (target->dist - 1)))
-        {
-            target = target->down;
-            continue;
-        }
+
     }
-    for (unsigned int i = 0; i < 3; i++)
-	{
-		if(TransBuff[i] == nullptr) {TransBuff[i] = target;}
-	}
-	for (unsigned int i = 0; i < CURRENT->spaces.size(); i++)
-	{
-		CURRENT->spaces[i]->dist = -1;
-	}
- }
+}

@@ -112,5 +112,5 @@ int main(int, char**)
 	}
 	CURRENT->destroy();
 	delete CURRENT;
-	return 1;
+	return 0;
 }

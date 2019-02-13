@@ -17,9 +17,9 @@ class Enemy: public RendObj
      static int velocity;
      Enemy(GLfloat xIn, GLfloat yIn, GLTexture srcTextures);
      void update();
+     void setPath(Space* pacmanPos);
     private:
      Space* TransBuff[3];
-     void path();
 };
 
 #endif //ENEMY_HPP
