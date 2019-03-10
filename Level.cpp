@@ -20,11 +20,11 @@ void Level::init(string name, bool full)
     stringstream ss;
     GLfloat x;
     GLfloat y = 0;
-    fstream file(("levels/" + current + ".lvl").c_str(), fstream::in);
+    fstream file(("assets/levels/" + current + ".lvl").c_str(), fstream::in);
     string caption;
     if(!REPEAT_LEVEL) {levelCounter++;}
     if(!file.is_open()) {cerr << "Error with loading file: " << strerror(errno) << endl; QUIT = true; return;}
-    textures.loadIMG("textures.png");
+    textures.loadIMG("assets/textures.png");
     getline(file, caption);
     next = caption;
     getline(file, caption);
@@ -65,7 +65,6 @@ void Level::init(string name, bool full)
                  break;
 				default:
                  cerr << "Error with loading level: Invalid character." << endl; QUIT = true; return;
-                 break;
 			}
 			x += 32;
 		}

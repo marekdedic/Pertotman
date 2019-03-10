@@ -24,11 +24,14 @@ void GLTexture::process(SDL_Surface* image)
 }
 void GLTexture::loadIMG(string filename)
 {
-
 	SDL_Surface* image = NULL;
     image = IMG_Load(filename.c_str());
-    if(image == NULL) {cerr << "Failed to load image: " << filename << endl; QUIT = true;}
-    else{process(image);}
+    if(image == NULL) {
+        cerr << "Failed to load image: " << filename << endl; QUIT = true;
+    }
+    else {
+        process(image);
+    }
 }
 void GLTexture::loadText(string text, string filename, int size, SDL_Color color)
 {
