@@ -4,7 +4,7 @@ using namespace std;
 Menu::Menu(menuType srcType) : type(srcType), xMin((SCREEN_WIDTH / 2) - 384), xMax((SCREEN_WIDTH / 2) + 384), yMin(32), yMax(SCREEN_HEIGHT - 32)
 {
     GLfloat yBuff = yMin + 32;
-    button.loadIMG("button.png");
+    button.loadIMG("assets/button.png");
     switch(type)
     {
         case MAIN:

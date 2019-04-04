@@ -66,7 +66,8 @@ MenuItem::MenuItem(GLfloat xIn, GLfloat yIn, GLTexture srcTextures, menuItemType
         default:
          break;
     }
-    caption.loadText(cap, "04B_30.ttf", 32, {0, 0, 0, 255});
+    // TODO: Don't segfault when font loading fails
+    caption.loadText(cap, "assets/04B_30.ttf", 32, {0, 0, 0, 255});
 }
 bool MenuItem::handleM(SDL_Event inputEvent)
 {
@@ -83,7 +84,8 @@ bool MenuItem::handleM(SDL_Event inputEvent)
              break;
             case SAVE:
              CURRENT->save();
-             caption.loadText("Successful!", "04B_30.ttf", 32, {0, 0, 0, 255});
+             // TODO: Don't segfault when font loading fails
+             caption.loadText("Successful!", "assets/04B_30.ttf", 32, {0, 0, 0, 255});
              break;
             case LOAD:
              CURRENT->destroy();
@@ -121,7 +123,8 @@ bool MenuItem::handleM(SDL_Event inputEvent)
                  cap = "Max. Framerate: Inf";
                  break;
              }
-             caption.loadText(cap, "04B_30.ttf", 32, {0, 0, 0, 255});
+             // TODO: Don't segfault when font loading fails
+             caption.loadText(cap, "assets/04B_30.ttf", 32, {0, 0, 0, 255});
              break;
             case DIF:
              switch (Enemy::velocity)
@@ -139,7 +142,8 @@ bool MenuItem::handleM(SDL_Event inputEvent)
                  cap = "Difficulty: Easy";
                  break;
              }
-             caption.loadText(cap, "04B_30.ttf", 32, {0, 0, 0, 255});
+             // TODO: Don't segfault when font loading fails
+             caption.loadText(cap, "assets/04B_30.ttf", 32, {0, 0, 0, 255});
              break;
             default:
              break;
